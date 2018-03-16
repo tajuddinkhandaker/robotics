@@ -154,11 +154,13 @@ return [
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
+        Robotics\Providers\AppServiceProvider::class,
+        Robotics\Providers\AuthServiceProvider::class,
+        // Robotics\Providers\BroadcastServiceProvider::class,
+        Robotics\Providers\EventServiceProvider::class,
+        Robotics\Providers\RouteServiceProvider::class,
+        
+        Barryvdh\Cors\ServiceProvider::class,
 
     ],
 

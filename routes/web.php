@@ -14,3 +14,13 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group([ 'prefix' => 'goodbots', 'as' => 'goodbots::' ], function() {
+
+	Route::get('/clients', 'HomeController@clients')->name('clients');
+
+});

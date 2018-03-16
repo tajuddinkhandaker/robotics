@@ -5,7 +5,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
@@ -78,16 +78,19 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
+                <div class="title m-b-md">                    
+                    <div class="row">
+                        <div class="col-md-6"><img src="{{ asset('images/goodbots/ms-icon-144x144.png') }}"></div>
+                        <div class="col-md-6">{{ config('app.name', 'Laravel') }}</div>                        
+                    </div>
                 </div>
 
                 <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="https://asdtechltd.com/robotics/goodbots/docs">Documentation</a>
+                    <a href="https://goodiecast.asdtechltd.com/">GoodieCast</a>
+                    <a href="https://goodbots-news.com">News</a>
+                    <a href="https://asdtechltd.com/robotics/goodbots/devices">Devices</a>
+                    <a href="https://github.com/tajuddinkhandaker/robotics">GitHub</a>
                 </div>
             </div>
         </div>
