@@ -5,6 +5,8 @@ namespace Robotics\Http\Controllers;
 use Robotics\Component;
 use Illuminate\Http\Request;
 
+use Log;
+
 class ComponentController extends Controller
 {
     /**
@@ -15,6 +17,8 @@ class ComponentController extends Controller
     public function index()
     {
         //
+        $states = Component::pluck('state')->map(function($item, $index) { return $item == 'ON' ? 1 : 0; });
+        return response()->json([ 'lights' => $states->toArray() ]);
     }
 
     /**
@@ -100,5 +104,11 @@ class ComponentController extends Controller
     {
         $states = Component::pluck('state')->map(function($item, $index) { return $item == 'ON' ? 1 : 0; });
         return response()->json([ 'lights' => $states->toArray() ]);
+    }
+
+    public function log(Request $request)
+    {
+        Log::info('[ip:'.$request->ip().'][client-id:'.$request->input('client_id').'][http-code:'.$request->input('http_code').']['.$request->input('ḿessage').']');
+        return response()->json([ 'data' => [ 'log' => [ 'is_sent' => true ] ] ]);
     }
 }   

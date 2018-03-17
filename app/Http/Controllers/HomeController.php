@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+    private $appName;
     /**
      * Create a new controller instance.
      *
@@ -14,6 +15,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->appName = strtolower(config('app.name'));
     }
 
     /**
@@ -33,6 +35,6 @@ class HomeController extends Controller
      */
     public function clients()
     {
-        return view(strtolower(config('app.name')) . '.homes.clients');
+        return view($this->appName.'.homes.clients');
     }
 }

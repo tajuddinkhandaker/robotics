@@ -19,15 +19,18 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'v1', 'middleware' => 'auth:api', 'as' => 'goodbots::'], function () {
 
+	Route::apiResource('components', 'ComponentController');
 
-	Route::resource('components', 'ComponentController');
+	Route::group([ 'middleware' => [ 'cors', 'client' ] ], function () {
 
-    Route::get('/iot/test2', function (Request $remoteRequest) {
-        
-        return response()->json([ 'lights' => [ 0, 1 ] ], 200, [
-        	'Access-Control-Allow-Origin' => '*'
-        ]);
-        
-    });
-    Route::get('/iot/test', 'ComponentController@states')->middleware('cors');
+	    Route::get('/iot/test', 'ComponentController@states');
+	});
+});
+
+Route::group(['prefix' => 'v1', 'middleware' => 'guest:api', 'as' => 'goodbots::'], function () {
+
+	Route::group([ 'prefix' => 'clients', 'middleware' => [ 'cors' ] ], function () {
+
+	    Route::post('/log', 'ComponentController@log')->name('ĺog');
+	});
 });

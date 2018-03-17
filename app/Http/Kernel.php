@@ -2,6 +2,7 @@
 
 namespace Robotics\Http;
 
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -64,5 +65,6 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'ssl.http' => \Robotics\Http\Middleware\HttpsProtocol::class,
         'cors' => \Barryvdh\Cors\HandleCors::class,
+        'client' => CheckClientCredentials::class,
     ];
 }
