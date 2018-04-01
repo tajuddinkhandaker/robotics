@@ -2,8 +2,10 @@
 
 namespace Robotics\Exceptions;
 
+use Log;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -14,6 +16,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
+        \Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException::class,
     ];
 
     /**
@@ -36,6 +39,13 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        // $vendor = config('app.name');
+        // if($exception instanceof MethodNotAllowedHttpException)
+        // {
+        //     // MethodNotAllowedHttpException $e = $exception;
+        //     // Log::critical('[' . $vendor . '][' . $e->getStatusCode() . '][' . $e->getHeaders() . '][' . $e->getMessage() . ']');
+        //     //abort(503);
+        // }
         parent::report($exception);
     }
 

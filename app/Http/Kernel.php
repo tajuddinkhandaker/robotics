@@ -38,6 +38,10 @@ class Kernel extends HttpKernel
             \Robotics\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             
+            // for this middleware we do not have to pass api_token for our own API calls
+            // @see https://laravel.com/docs/5.6/passport#consuming-your-api-with-javascript
+            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+
             // Custom middlewares
             \Robotics\Http\Middleware\HttpsProtocol::class,
         ],
@@ -66,5 +70,7 @@ class Kernel extends HttpKernel
         'ssl.http' => \Robotics\Http\Middleware\HttpsProtocol::class,
         'cors' => \Barryvdh\Cors\HandleCors::class,
         'client' => CheckClientCredentials::class,
+        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
+        'scope' => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
     ];
 }

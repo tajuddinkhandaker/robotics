@@ -30,6 +30,11 @@ class AuthServiceProvider extends ServiceProvider
         Passport::routes();
 
         Passport::enableImplicitGrant();
+
+        Passport::tokensCan([
+            'check-components-status' => 'Check componenets status',
+            'write-error-logs' => 'Write error logs to storage',
+        ]);
         
         // Passport::tokensExpireIn(now()->addDays(15));
 

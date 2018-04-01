@@ -23,7 +23,7 @@ Route::group(['prefix' => 'v1', 'middleware' => 'auth:api', 'as' => 'goodbots::'
 
 	Route::group([ 'middleware' => [ 'cors', 'client' ] ], function () {
 
-	    Route::get('/iot/test', 'ComponentController@states');
+	    //Route::get('/components/states/botclients/{botclient}', 'ComponentController@states')->name('components.states');
 	});
 });
 
@@ -32,5 +32,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'guest:api', 'as' => 'goodbots::
 	Route::group([ 'prefix' => 'clients', 'middleware' => [ 'cors' ] ], function () {
 
 	    Route::post('/log', 'ComponentController@log')->name('ĺog');
+	    Route::get('/components/states/botclients/{botclient}', 'ComponentController@states')->name('components.states');
 	});
 });

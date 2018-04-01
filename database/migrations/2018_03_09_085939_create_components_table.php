@@ -14,9 +14,13 @@ class CreateComponentsTable extends Migration
     public function up()
     {
         Schema::create('components', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
+            $table->bigInteger('profile_id')->default(0);
+            $table->bigInteger('componentable_id');
+            $table->string('componentable_type');
             $table->string('name');
-            $table->enum('state', [ 'ON', 'OFF' ])->default('OFF');
+            $table->enum('type', [ 'LIGHT', 'FAN' ])->default('LIGHT');
+            $table->enum('state', [ 'OFF', 'ON' ])->default('OFF');
             $table->timestamps();
         });
     }

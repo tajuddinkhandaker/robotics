@@ -2,7 +2,7 @@
 
 @push('topbar-menu-item')
 
-<a class="dropdown-item" href="{{ route('home') }}">Dashboard</a>
+<a class="dropdown-item" href="{{ route(config('app.name').'::home') }}">Dashboard</a>
 
 @endpush
 

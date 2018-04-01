@@ -35,6 +35,11 @@ Vue.component(
     require('./components/passport/PersonalAccessTokens.vue')
 );
 
+Vue.component(
+    'goodbots-electrical-components',
+    require('./components/goodbots/ElectricalComponents.vue')
+);
+
 const app = new Vue({
     el: '#app'
 });

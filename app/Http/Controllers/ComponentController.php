@@ -3,32 +3,30 @@
 namespace Robotics\Http\Controllers;
 
 use Robotics\Component;
+use Robotics\BotClient;
+
 use Illuminate\Http\Request;
 
+use Auth;
 use Log;
+use Carbon\Carbon;
 
 class ComponentController extends Controller
 {
+    private static function getUserRegisteredComponents($user)
+    {
+        return [ 'data' => Component::withInComponentable($user->getRegisteredBotIds()->toArray())->toArray() ];
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-        $states = Component::pluck('state')->map(function($item, $index) { return $item == 'ON' ? 1 : 0; });
-        return response()->json([ 'lights' => $states->toArray() ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        // {"data":[{"id":1,"name":"BedLight","type":"LIGHT","state":"OFF"}]}
+        return response()->json(self::getUserRegisteredComponents($request->user()));
     }
 
     /**
@@ -39,14 +37,12 @@ class ComponentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, Component::getRules());
         $c = new Component;
-        $c->name = $request->input('name');
-        if ($c->save())
-        {
-            return response()->json([ 'data' => [ 'message' => 'New component ('.$c->name.') is added.' ] ]);
-        }
-        return response()->json([ 'data' => [ 'message' => 'Component add failed.' ] ]);
+        $c->name = $request->name;
+        $c->type = $request->type;
+        $c->componentable()->associate(BotClient::find($request->bot_id));
+        return $c->save() ? $c : null;
     }
 
     /**
@@ -61,23 +57,6 @@ class ComponentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \Robotics\Component  $component
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Component $component)
-    {
-        //
-        $component->state = $component->state == 'ON' ? 'OFF' : 'ON';
-        if ($component->save())
-        {
-            return response()->json([ 'data' => [ 'message' => $component->name.' is switched.', 'switch_state' => $component->state ] ]);
-        }
-        return response()->json([ 'data' => [ 'message' => $component->name.' is failed to switch.' ] ]);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -86,7 +65,13 @@ class ComponentController extends Controller
      */
     public function update(Request $request, Component $component)
     {
-        //
+        if (!$component)
+            return null;
+        $this->validate($request, Component::getRules());
+        $component->state = $request->state;
+        $component->type = $request->type;
+        $component->name = $request->name;
+        return $component->save() ? $component : null;
     }
 
     /**
@@ -97,17 +82,29 @@ class ComponentController extends Controller
      */
     public function destroy(Component $component)
     {
-        //
+        return $component && $component->delete() ? $component : null;
     }
 
-    public function states()
+    public function states(BotClient $botclient)
     {
-        $states = Component::pluck('state')->map(function($item, $index) { return $item == 'ON' ? 1 : 0; });
-        return response()->json([ 'lights' => $states->toArray() ]);
+        $updatedAt = $botclient->updated_at->timezone('Asia/Dhaka');
+        $now = Carbon::now()->timezone('Asia/Dhaka');
+        $updated = ($now->second - $updatedAt->second) <= 10;
+        Log::info('Updated '. $updatedAt->diffForHumans() );
+        Log::info($updated ? 'device status updated' : 'device status remained');
+        return response()->json([ 
+            'lights' => $updated ? Component::getStatesWithInComponentable([ $botclient->id ])->toArray() : [],
+            'updated' => $updated
+        ]);
     }
 
     public function log(Request $request)
     {
+        $this->validate($request, [
+            'client_id' => 'present',
+            'http_code' => 'present',
+            'message' => 'present|min:1',
+        ]);
         Log::info('[ip:'.$request->ip().'][client-id:'.$request->input('client_id').'][http-code:'.$request->input('http_code').']['.$request->input('ḿessage').']');
         return response()->json([ 'data' => [ 'log' => [ 'is_sent' => true ] ] ]);
     }

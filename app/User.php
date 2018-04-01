@@ -27,4 +27,18 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * Get all of the clients.
+     */
+    public function botclients()
+    {
+        return $this->hasMany('Robotics\BotClient');
+    }
+
+    public function getRegisteredBotIds()
+    {
+        return $this->botclients->pluck('id')->map(function ($id, $key) { return $id; });
+    }
+
 }

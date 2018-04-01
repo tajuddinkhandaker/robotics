@@ -2,7 +2,7 @@
 
 @push('topbar-menu-item')
 
-<a class="dropdown-item" href="{{ route('goodbots::clients') }}">Clients</a>
+<a class="dropdown-item" href="{{ route(config('app.name').'::clients') }}">Clients</a>
 
 @endpush
 
@@ -10,18 +10,18 @@
 <script type="text/javascript">
     $(document).ready(function() {
 
-        $.get( "/api/v1/iot/test")
-          .done(function( response ) {
-            console.log( "Data Loaded: " + response.lights.length );
+        // $.get( "/api/v1/iot/test")
+        //   .done(function( response ) {
+        //     console.log( "Data Loaded: " + response.lights.length );
 
-           jQuery.each(response.lights, function(index, item) {
+        //    jQuery.each(response.lights, function(index, item) {
                 
-                var light = $('#light' + (index + 1));
-                light.text('LIGHT ' + (index + 1) + ' - ' + (item === 0 ? 'OFF' : 'ON'));
-                light.css('background-color', item === 1 ? 'green' : 'red');
-            });
+        //         var light = $('#light' + (index + 1));
+        //         light.text('LIGHT ' + (index + 1) + ' - ' + (item === 0 ? 'OFF' : 'ON'));
+        //         light.css('background-color', item === 1 ? 'green' : 'red');
+        //     });
 
-          });
+        //   });
         
         $('#light2').click(function() {
         
@@ -81,15 +81,10 @@
                         </div>
                     @endif
 
-                    You are logged in!
-                    @if(env('QUICK_DEMO', false) === true)
-                    <button id="add">Add</button>
-
-                    <button id="light1" class="edit">Light 1</button>
-                    <button id="light2" class="edit">Light 2</button>
-                    @endif
+                    You are logged in to your dashboard!
                 </div>
             </div>
+            <goodbots-electrical-components></goodbots-electrical-components>
         </div>
     </div>
 </div>
